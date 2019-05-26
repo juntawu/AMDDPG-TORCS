@@ -1,0 +1,5 @@
+models passing e-track4:
+actormodel_2018_04_03_episode3450.h5
+actormodel_2018_04_03_episode3000.h5
+actormodel_2018_04_03_episode2300.h5
+actormodel_2018_04_03_episode3850.h5
