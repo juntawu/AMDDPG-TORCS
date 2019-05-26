@@ -12,10 +12,10 @@ import os
 
 ################################################################################################################################
 # trained model
-path = '/home/juntawu/my_work/gym_trocs/'
+path = '../'
 year = 2018
 month = 4
-day = 17
+day = 3
 track = 'CG1'
 #actor_model = path + 'trained_model_%d_%02d_%02d/actormodel_%d_%02d_%02d_episode%d.h5' % (year, month, day, year, month, day, episode)
 #critic_model = path + 'trained_model_%d_%02d_%02d/criticmodel_%d_%02d_%02d_episode%d.h5' % (year, month, day, year, month, day, episode)

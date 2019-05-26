@@ -1,0 +1,3 @@
+models passing CG1:
+actormodel_2018_04_03_episode2200.h5
+actormodel_2018_04_03_episode2300.h5

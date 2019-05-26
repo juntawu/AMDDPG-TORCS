@@ -17,36 +17,10 @@ from ActorNetwork import ActorNetwork
 from CriticNetwork import CriticNetwork
 from OU import OU
 import timeit
-import time
-import os
-
-################################################################################################################################
-# usage of gpu
-GPU_USAGE = 1
-
-# pre-trained model
-path = '../'
-year = 2017
-month = 12
-day = 29
-episode = 3199
-actor_model = path + 'model_origin/actormodel.h5'
-critic_model = path + 'model_origin/criticmodel.h5'
-# actor_model = path + 'trained_model_%d_%02d_%02d/actormodel-%d-%02d-%02d-episode%d.h5' % (year, month, day, year, month, day, episode)
-# critic_model = path + 'trained_model_%d_%02d_%02d/criticmodel-%d-%02d-%02d-episode%d.h5' % (year, month, day, year, month, day, episode)
-
-# path for saving model
-save_path = path + 'trained_model/'
-################################################################################################################################
-
-
-
-ISOTIMEFORMAT='%Y_%m_%d'
-time_stamp = time.strftime(ISOTIMEFORMAT, time.gmtime(time.time()))
 
 OU = OU()       #Ornstein-Uhlenbeck Process
 
-def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
+def playGame(train_indicator=0):    #1 means Train, 0 means simply Run
     BUFFER_SIZE = 100000
     BATCH_SIZE = 32
     GAMMA = 0.99
@@ -62,8 +36,8 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
     vision = False
 
     EXPLORE = 100000.
-    episode_count = 4000
-    max_steps = 2000
+    episode_count = 2000
+    max_steps = 100000
     reward = 0
     done = False
     step = 0
@@ -73,10 +47,8 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
     indicator = 0
 
     #Tensorflow GPU optimization
-    #os.environ["CUDA_VISIBLE_DEVICES"]="2,3,4,5,6,7"
     config = tf.ConfigProto()
-    config.gpu_options.per_process_gpu_memory_fraction = GPU_USAGE
-    #config.gpu_options.allow_growth = True
+    config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)
     from keras import backend as K
     K.set_session(sess)
@@ -86,20 +58,27 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
     buff = ReplayBuffer(BUFFER_SIZE)    #Create replay buffer
 
     # Generate a Torcs environment
-    env = TorcsEnv(vision=vision, throttle=True, gear_change=False, render = False)
+
+
+    env = TorcsEnv(vision=vision, throttle=True, gear_change=False)
     # env = TorcsEnv(vision=vision, throttle=True, gear_change=True)
 
     #Now load the weight
-    actor.model.load_weights(actor_model)
-    critic.model.load_weights(critic_model)
-    actor.target_model.load_weights(actor_model)
-    critic.target_model.load_weights(critic_model)
-    print("Weight load successfully")
+    print("Now we load the weight")
+    try:
+        actor.model.load_weights("actormodel.h5")
+        critic.model.load_weights("criticmodel.h5")
+        actor.target_model.load_weights("actormodel.h5")
+        critic.target_model.load_weights("criticmodel.h5")
+        print("Weight load successfully")
+    except:
+        print("Cannot find the weight")
+    # actor.model.load_weights("actormodel.h5")
+    # critic.model.load_weights("criticmodel.h5")
+    # actor.target_model.load_weights("actormodel.h5")
+    # critic.target_model.load_weights("criticmodel.h5")
+    # print("Weight load successfully")
 
-
-    #[WJT]: open file for saving information
-    training_info = open(save_path + "training_info.txt", 'w')
-    experience_replay = open(save_path + "experience_replay.txt", 'w')
 
     print("TORCS Experiment Start.")
     for i in range(episode_count):
@@ -111,19 +90,15 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
         else:
             ob = env.reset()
 
-
         s_t = np.hstack((ob.angle, ob.track, ob.trackPos, ob.speedX, ob.speedY,  ob.speedZ, ob.wheelSpinVel/100.0, ob.rpm))
      
         total_reward = 0.
-
-        # [WJT]: steps of current episode
-        steps_episode = 0
         for j in range(max_steps):
             loss = 0 
             epsilon -= 1.0 / EXPLORE
             a_t = np.zeros([1,action_dim])
             noise_t = np.zeros([1,action_dim])
-
+            
             a_t_original = actor.model.predict(s_t.reshape(1, s_t.shape[0]))
             noise_t[0][0] = train_indicator * max(epsilon, 0) * OU.function(a_t_original[0][0],  0.0 , 0.60, 0.30)
             noise_t[0][1] = train_indicator * max(epsilon, 0) * OU.function(a_t_original[0][1],  0.5 , 1.00, 0.10)
@@ -138,12 +113,11 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
             a_t[0][1] = a_t_original[0][1] + noise_t[0][1]
             a_t[0][2] = a_t_original[0][2] + noise_t[0][2]
 
-            ob, r_t, done, info, episode_terminate = env.step(a_t[0])
+            ob, r_t, done, info = env.step(a_t[0])
 
             s_t1 = np.hstack((ob.angle, ob.track, ob.trackPos, ob.speedX, ob.speedY, ob.speedZ, ob.wheelSpinVel/100.0, ob.rpm))
-
-            buff.add(s_t, a_t[0], r_t, s_t1, done)  # Add replay buffer
-
+        
+            buff.add(s_t, a_t[0], r_t, s_t1, done)      #Add replay buffer
             
             #Do the batch update
             batch = buff.getBatch(BATCH_SIZE)
@@ -175,85 +149,34 @@ def playGame(train_indicator=1):    #1 means Train, 0 means simply Run
             s_t = s_t1
         
             print("Episode", i, "Step", step, "Action", a_t, "Reward", r_t, "Loss", loss)
-            print(buff.num_experiences)
-            # training_info.write(str(i) + ';' + str(step) + ';' + str(r_t) + ';' + str(loss) + ';' + '\n')
-
-            steps_episode += 1
+        
             step += 1
             if done:
                 break
 
-            # [WJT] for the stability of connection
-            if i == 0:
-                break
+        if np.mod(i, 3) == 0:
+            if (train_indicator):
 
 
-    ##############################################################################################################
-        #[wjt]: save model when the car can pass the track with this model
-	# if(i>=1000 and (i+1)%100==0):
-	if( (i+1) % 100 == 0 ):
-	    print ('Testing the model ......')
-        ob = env.reset()
-        s_t = np.hstack((ob.angle, ob.track, ob.trackPos, ob.speedX, ob.speedY, ob.speedZ, ob.wheelSpinVel / 100.0, ob.rpm))
-        env.test = True
-        flag_pass_track = False
-        max_test_steps = 5000
-        for test_step in range(max_test_steps):
-            a_t = actor.model.predict(s_t.reshape(1, s_t.shape[0]))
-            ob, r_t, done, info, episode_terminate = env.step(a_t[0])
-            if done:
-                break
-            env.client.S.check_laps()
-            if env.client.S.laps > 1:
-                flag_pass_track = True
-                break
-            s_t = np.hstack(
-                (ob.angle, ob.track, ob.trackPos, ob.speedX, ob.speedY, ob.speedZ, ob.wheelSpinVel / 100.0, ob.rpm))
-
-            if (flag_pass_track):
                 print("Now we save model")
 
-                actor.model.save_weights(save_path + "actormodel_"+time_stamp+"_episode%d.h5" %(i+1), overwrite=True)
-                # with open("trained_model/actormodel-"+time_stamp+"-episode%d.json" %i, "w") as outfile:
-                #     json.dump(actor.model.to_json(), outfile)
+
+                actor.model.save_weights("actormodel.h5", overwrite=True)
+                with open("actormodel.json", "w") as outfile:
+                    json.dump(actor.model.to_json(), outfile)
 
 
-                critic.model.save_weights(save_path + "criticmodel_"+time_stamp+"_episode%d.h5" %(i+1), overwrite=True)
-                # with open("trained_model/criticmodel-"+time_stamp+"-episode%d.json" %i, "w") as outfile:
-                #     json.dump(critic.model.to_json(), outfile)
-	    env.test = False
-    ##############################################################################################################
-
+                critic.model.save_weights("criticmodel.h5", overwrite=True)
+                with open("criticmodel.json", "w") as outfile:
+                    json.dump(critic.model.to_json(), outfile)
 
         print("TOTAL REWARD @ " + str(i) +"-th Episode  : Reward " + str(total_reward))
 
         print("Total Step: " + str(step))
         print("")
 
-    #[WJT]: save experiences
-    #for k in range(buff.num_experiences):
-        #for l in range(29):  # save s_t
-            #experience_replay.write(str(buff.buffer[k][0][l]) + ';')
-        #for l in range(3):
-            #experience_replay.write(str(buff.buffer[k][1][l]) + ';')  # a_t
-        #experience_replay.write(str(buff.buffer[k][2]) + ';')  # r_t
-        #for l in range(29):  # s_t1
-            #experience_replay.write(str(buff.buffer[k][3][l]) + ';')
-        #experience_replay.write(str(buff.buffer[k][4]))  # done
-        #experience_replay.write('\n')
-
-
     env.end()  # This is for shutting down TORCS
     print("Finish.")
 
-    #[WJT]: close file
-    training_info.close()
-    experience_replay.close()
-
-
 if __name__ == "__main__":
-    start_time = time.time()
     playGame()
-    end_time = time.time()
-    total_hours = (end_time - start_time) / 3600
-    print("Total training time: %f hours \n" % total_hours)
