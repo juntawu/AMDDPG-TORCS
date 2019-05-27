@@ -33,30 +33,30 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     ```
     
 3. Install Numpy, Matplotlib, OpenCV, h5py in "python2.7" environment
-    '''Shell
+    ```
     pip install --upgrade setuptools
     pip install -U --pre numpy Matplotlib
     pip install -U --pre opencv-python
     pip install h5py
-    '''
+    ```
 
 4. Install Gym
-    '''Shell
+    ```Shell
     pip install -U --pre gym
-    '''
+    ```
     
 5. Install Kears
-    '''Shell
+    ```Shell
     pip install -U --pre keras==1.1.0
-    '''
+    ```
 
 6. Install Tensorflow (CPU version)
-    '''Shell
+    ```Shell
     pip install -U --pre tensorflow==0.12.0
-    '''
+    ```
     
 7. Install Gym-Torcs
-    '''Shell
+    ```Shell
     git clone https://github.com/ugo-nama-kun/gym_torcs
     sudo apt-get install xautomation libglib2.0-dev  libgl1-mesa-dev libglu1-mesa-dev  freeglut3-dev  libplib-dev  libopenal-dev libalut-dev libxi-dev libxmu-dev libxrender-dev  libxrandr-dev libpng12-dev 
     cd $Gym-Torcs-ROOT/vtorcs-RL-colors/
@@ -64,12 +64,12 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     sudo make 
     sudo make install
     sudo make datainstall
-    '''
+    ```
     
 8. Clone AMDDPG-TORCS repository
-    '''Shell
+    ```Shell
     git clone 
     
-    '''
+    ```
 
 
