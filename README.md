@@ -27,10 +27,10 @@ For convenience, environment configuration is done on Anaconda. Terminal command
 1. Follow [installation instructions](https://www.anaconda.com/distribution/) to install Anaconda.
 
 2. Create Python 2.7 virtual environment on Anaconda
-    '''Shell
+    ```Shell
     conda create --name python2.7 python=2.7
     source activate python2.7
-    '''
+    ```
     
 3. Install Numpy, Matplotlib, OpenCV, h5py in "python2.7" environment
     '''Shell
