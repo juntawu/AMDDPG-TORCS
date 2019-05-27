@@ -33,7 +33,7 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     ```
     
 3. Install Numpy, Matplotlib, OpenCV, h5py in "python2.7" environment
-    ```
+    ```Shell
     pip install --upgrade setuptools
     pip install -U --pre numpy Matplotlib
     pip install -U --pre opencv-python
