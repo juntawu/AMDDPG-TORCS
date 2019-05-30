@@ -55,11 +55,12 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     pip install -U --pre tensorflow==0.12.0
     ```
     
-7. Install Gym-Torcs
+7. Install Gym-TORCS
+    Note: We'll call the directory that you cloned Gym-TORCS as `$GYM-TORCS-ROOT`
     ```Shell
     git clone https://github.com/ugo-nama-kun/gym_torcs
     sudo apt-get install xautomation libglib2.0-dev  libgl1-mesa-dev libglu1-mesa-dev  freeglut3-dev  libplib-dev  libopenal-dev libalut-dev libxi-dev libxmu-dev libxrender-dev  libxrandr-dev libpng12-dev 
-    cd $Gym-Torcs-ROOT/vtorcs-RL-colors/
+    cd $Gym-TORCS-ROOT/vtorcs-RL-colors/
     ./configure
     sudo make 
     sudo make install
@@ -68,8 +69,31 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     
 8. Clone AMDDPG-TORCS repository
     ```Shell
-    git clone 
-    
+    git clone https://github.com/juntawu/AMDDPG-TORCS
+    ```
+    Note: We'll call the directory that you cloned AMDDPG-TORCS as `$AMDDPG-TORCS-ROOT`
+
+### Testing DDPG
+    ```Shell
+    cd $AMDDPG-TORCS-ROOT/DDPG/ddpg_2018_03_24
+    python test_policy.py
+    ```
+
+### Testing AMDDPG
+    ```Shell
+    cd $AMDDPG-TORCS-ROOT/AMDDPG/multi_ddpg_2018_05_10
+    python test_multi_ddpg.py
     ```
 
 
+### Training DDPG
+    ```Shell
+    cd $AMDDPG-TORCS-ROOT/DDPG/ddpg_2018_03_24
+    python train_ddpg.py
+    ```
+
+### Training AMDDPG
+    ```Shell
+    cd $AMDDPG-TORCS-ROOT/AMDDPG/multi_ddpg_2018_05_10
+    python train_multi_ddpg.py
+    ```
