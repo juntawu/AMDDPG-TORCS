@@ -56,12 +56,29 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     ```
     
 7. Install Gym-TORCS
-    Note: We'll call the directory that you cloned Gym-TORCS as `$GYM-TORCS-ROOT`
+
+    Note: We'll call the directory that you cloned Gym-TORCS as `$Gym-TORCS-ROOT`
+    
     ```Shell
     git clone https://github.com/ugo-nama-kun/gym_torcs
     sudo apt-get install xautomation libglib2.0-dev  libgl1-mesa-dev libglu1-mesa-dev  freeglut3-dev  libplib-dev  libopenal-dev libalut-dev libxi-dev libxmu-dev libxrender-dev  libxrandr-dev libpng12-dev 
     cd $Gym-TORCS-ROOT/vtorcs-RL-colors/
     ./configure
+    sudo make 
+    sudo make install
+    sudo make datainstall
+    ```
+    The default interface of Gym-TORCS dose not show the racing car. Please follow the following instructions to change the source code so as to show the body of the car.
+    
+    Open the file `$Gym-TORCS-ROOT/vtorcs-RL-color/src/modules/graphic/ssggraph/grscreen.cpp` and change the 280th line of `grscreen.cpp` to be
+    ```Shell
+    for (i = 1; i < s->_ncars; i++) {
+        grDrawCar(cars[i], curCar, dispCam->getDrawCurrent(), dispCam->getDrawDriver(), s->currentTime, dispCam);
+    }
+    ```
+    
+    Re-make Gym-TORCS
+    ```Shell
     sudo make 
     sudo make install
     sudo make datainstall
