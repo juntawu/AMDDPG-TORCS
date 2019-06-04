@@ -1,4 +1,4 @@
-## RL-TORCS
+## AMDDPG-TORCS
 
 
 ### Paper
