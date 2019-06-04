@@ -73,26 +73,31 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     ```
     Note: We'll call the directory that you cloned AMDDPG-TORCS as `$AMDDPG-TORCS-ROOT`
 
-### Testing DDPG
+### Testing
+
+1. Testing DDPG
     ```Shell
     cd $AMDDPG-TORCS-ROOT/DDPG/ddpg_2018_03_24
     python test_policy.py
     ```
 
-### Testing AMDDPG
+2. Testing AMDDPG
     ```Shell
     cd $AMDDPG-TORCS-ROOT/AMDDPG/multi_ddpg_2018_05_10
     python test_multi_ddpg.py
     ```
 
 
-### Training DDPG
+
+### Training
+
+1. Training DDPG
     ```Shell
     cd $AMDDPG-TORCS-ROOT/DDPG/ddpg_2018_03_24
     python train_ddpg.py
     ```
 
-### Training AMDDPG
+2. Training AMDDPG
     ```Shell
     cd $AMDDPG-TORCS-ROOT/AMDDPG/multi_ddpg_2018_05_10
     python train_multi_ddpg.py
