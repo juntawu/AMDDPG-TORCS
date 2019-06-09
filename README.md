@@ -72,7 +72,7 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     
     Open the file `$Gym-TORCS-ROOT/vtorcs-RL-color/src/modules/graphic/ssggraph/grscreen.cpp` and change the 280th line of `grscreen.cpp` to be
     ```Shell
-    for (i = 1; i < s->_ncars; i++) {
+    for (i = 0; i < s->_ncars; i++) {
         grDrawCar(cars[i], curCar, dispCam->getDrawCurrent(), dispCam->getDrawDriver(), s->currentTime, dispCam);
     }
     ```
