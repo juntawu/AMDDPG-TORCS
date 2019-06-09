@@ -54,10 +54,12 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     ```Shell
     pip install -U --pre tensorflow==0.12.0
     ```
-    
+
 7. Install Gym-TORCS
 
     Note: We'll call the directory that you cloned Gym-TORCS as `$Gym-TORCS-ROOT`
+
+- Base
     
     ```Shell
     git clone https://github.com/ugo-nama-kun/gym_torcs
@@ -68,6 +70,28 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     sudo make install
     sudo make datainstall
     ```
+    
+    
+    - Test Gym-Torcs
+    
+    Open a terminal:
+    
+    ```
+    torcs
+    ```
+    
+    Click on TORCS interface: "Race –> Practice –> New Race". You should see a blue interdace which prints "Initializing Driver scr_server1".
+    
+    Open another terminal:
+    ```
+    cd $Gym-TORCS-ROOT/
+    python3 snakeoil3_gym.py
+    ```
+    You should see a car running on the track automatically. Note that there may be “print" function error with "snakeoil3_gym.py" because of python version.
+    
+    
+    - Show the car
+    
     The default interface of Gym-TORCS dose not show the racing car. Please follow the following instructions to change the source code so as to show the body of the car.
     
     Open the file `$Gym-TORCS-ROOT/vtorcs-RL-color/src/modules/graphic/ssggraph/grscreen.cpp` and change the 280th line of `grscreen.cpp` to be
@@ -84,11 +108,22 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     sudo make datainstall
     ```
     
+    - Select track
+    
+    '''
+    sudo torcs
+    '''
+    Click "Race –> Quick Race –> Configure Race", select track, accept and quit.
+    
+
+    
 8. Clone AMDDPG-TORCS repository
     ```Shell
     git clone https://github.com/juntawu/AMDDPG-TORCS
     ```
     Note: We'll call the directory that you cloned AMDDPG-TORCS as `$AMDDPG-TORCS-ROOT`
+
+
 
 ### Testing
 
