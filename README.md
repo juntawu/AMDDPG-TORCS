@@ -71,8 +71,7 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     sudo make datainstall
     ```
     
-    
-    - Test Gym-Torcs
+- Test Gym-Torcs
     
     Open a terminal:
     
@@ -83,6 +82,7 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     Click on TORCS interface: "Race –> Practice –> New Race". You should see a blue interdace which prints "Initializing Driver scr_server1".
     
     Open another terminal:
+    
     ```
     cd $Gym-TORCS-ROOT/
     python3 snakeoil3_gym.py
@@ -90,7 +90,7 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     You should see a car running on the track automatically. Note that there may be “print" function error with "snakeoil3_gym.py" because of python version.
     
     
-    - Show the car
+- Show the car
     
     The default interface of Gym-TORCS dose not show the racing car. Please follow the following instructions to change the source code so as to show the body of the car.
     
@@ -108,11 +108,11 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     sudo make datainstall
     ```
     
-    - Select track
+- Select track
     
-    '''
+    ```
     sudo torcs
-    '''
+    ```
     Click "Race –> Quick Race –> Configure Race", select track, accept and quit.
     
 
