@@ -37,7 +37,7 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     pip install --upgrade setuptools
     pip install -U --pre numpy Matplotlib
     pip install -U --pre opencv-python
-    pip install h5py
+    pip install requests h5py
     ```
 
 4. Install Gym
@@ -132,14 +132,14 @@ For convenience, environment configuration is done on Anaconda. Terminal command
     cd $AMDDPG-TORCS-ROOT/DDPG/ddpg_2018_03_24
     python test_policy.py
     ```
-    You should see the result shown in "resuslt_2018_04_03_episode3450.mp4"
+    You should see the result shown in "resuslt_2018_04_03_episode3450.mp4" after two instable episodes.
 
 2. Testing AMDDPG
     ```Shell
     cd $AMDDPG-TORCS-ROOT/AMDDPG/multi_ddpg_2018_05_10
     python test_multi_ddpg.py
     ```
-    You should see the result shown in "result_2018_05_16_episode5500.mp4"
+    You should see the result shown in "result_2018_05_16_episode5500.mp4" after two instable episodes.
 
 
 
